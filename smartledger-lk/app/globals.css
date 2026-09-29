@@ -1,0 +1,352 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Google Fonts ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap');
+
+/* ─── CSS Custom Properties ────────────────────────────────────── */
+@layer base {
+  :root {
+    --background: 248 250 252;
+    --foreground: 17 24 39;
+    --card: 255 255 255;
+    --card-foreground: 17 24 39;
+    --popover: 255 255 255;
+    --popover-foreground: 17 24 39;
+    --primary: 255 87 34;
+    --primary-foreground: 255 255 255;
+    --secondary: 243 244 246;
+    --secondary-foreground: 17 24 39;
+    --muted: 243 244 246;
+    --muted-foreground: 107 114 128;
+    --accent: 255 245 242;
+    --accent-foreground: 255 87 34;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
+    --border: 229 231 235;
+    --input: 229 231 235;
+    --ring: 255 87 34;
+    --radius: 0.75rem;
+
+    /* Glass */
+    --glass: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+    /* Mesh orb colors (light mode) */
+    --orb-1: rgba(255, 87, 34, 0.18);
+    --orb-2: rgba(255, 167, 38, 0.14);
+    --orb-3: rgba(79, 70, 229, 0.10);
+    --orb-4: rgba(16, 185, 129, 0.10);
+  }
+
+  .dark {
+    --background: 5 7 20;
+    --foreground: 249 250 251;
+    --card: 13 17 35;
+    --card-foreground: 249 250 251;
+    --popover: 13 17 35;
+    --popover-foreground: 249 250 251;
+    --primary: 255 122 77;
+    --primary-foreground: 5 7 20;
+    --secondary: 22 30 53;
+    --secondary-foreground: 249 250 251;
+    --muted: 22 30 53;
+    --muted-foreground: 156 163 175;
+    --accent: 22 30 53;
+    --accent-foreground: 255 167 133;
+    --destructive: 248 113 113;
+    --destructive-foreground: 5 7 20;
+    --border: 30 41 70;
+    --input: 30 41 70;
+    --ring: 255 122 77;
+
+    /* Glass (dark) */
+    --glass: rgba(13, 17, 35, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+    /* Mesh orb colors (dark mode) */
+    --orb-1: rgba(255, 87, 34, 0.22);
+    --orb-2: rgba(255, 167, 38, 0.12);
+    --orb-3: rgba(99, 102, 241, 0.18);
+    --orb-4: rgba(16, 185, 129, 0.12);
+  }
+}
+
+/* ─── Base Layer ────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-foreground font-sans;
+    background-color: rgb(var(--background));
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Premium scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(var(--primary), 0.35);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--primary), 0.55);
+  }
+}
+
+/* ─── Keyframe Animations ────────────────────────────────────────── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-28px) scale(1.04); }
+}
+
+@keyframes float-med {
+  0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+  33%       { transform: translateY(-18px) scale(1.02) rotate(3deg); }
+  66%       { transform: translateY(10px) scale(0.98) rotate(-2deg); }
+}
+
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes mesh-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0px); }
+}
+
+@keyframes counter-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Utility Layer ─────────────────────────────────────────────── */
+@layer utilities {
+  /* ── Glass card ──────────────────────────────── */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-dark {
+    background: rgba(13, 17, 35, 0.80);
+    border: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+
+  /* ── Mesh background ──────────────────────────── */
+  .bg-mesh {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-mesh::before,
+  .bg-mesh::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+  }
+
+  /* Orb 1 — brand orange */
+  .bg-mesh::before {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -100px;
+    background: var(--orb-1);
+    animation: float-slow 14s ease-in-out infinite;
+  }
+
+  /* Orb 2 — amber */
+  .bg-mesh::after {
+    width: 500px;
+    height: 500px;
+    bottom: -150px;
+    left: -100px;
+    background: var(--orb-2);
+    animation: float-med 18s ease-in-out infinite;
+  }
+
+  /* Extra orbs via pseudo elements on children */
+  .bg-mesh-child {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Dashboard mesh (more subtle) ─────────────── */
+  .bg-dashboard {
+    background:
+      radial-gradient(ellipse 60% 50% at 90% 10%, var(--orb-1), transparent),
+      radial-gradient(ellipse 50% 40% at 10% 90%, var(--orb-3), transparent),
+      radial-gradient(ellipse 40% 30% at 50% 50%, var(--orb-4), transparent),
+      rgb(var(--background));
+    background-attachment: fixed;
+  }
+
+  /* ── Gradient text ────────────────────────────── */
+  .text-gradient {
+    background: linear-gradient(135deg, #FF5722 0%, #FF8A50 40%, #FFB347 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-cool {
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #A78BFA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Gradient borders ────────────────────────── */
+  .border-gradient {
+    position: relative;
+    border: none !important;
+  }
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #FF5722, #FFB347, #FF5722);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ── Shimmer effect ─────────────────────────── */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255,255,255,0.15) 50%,
+      transparent 100%
+    );
+    background-size: 200% auto;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* ── Glow effects ────────────────────────────── */
+  .glow-brand {
+    box-shadow: 0 0 20px rgba(255, 87, 34, 0.35), 0 0 60px rgba(255, 87, 34, 0.15);
+  }
+
+  .glow-brand-sm {
+    box-shadow: 0 0 10px rgba(255, 87, 34, 0.25), 0 4px 20px rgba(255, 87, 34, 0.12);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.30);
+  }
+
+  .glow-danger {
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.30);
+  }
+
+  /* ── Touch target ─────────────────────────────── */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* ── Floating animations ─────────────────────── */
+  .animate-float-slow  { animation: float-slow  14s ease-in-out infinite; }
+  .animate-float-med   { animation: float-med   18s ease-in-out infinite; }
+  .animate-float-fast  { animation: float-fast   8s ease-in-out infinite; }
+  .animate-pulse-glow  { animation: pulse-glow   4s ease-in-out infinite; }
+  .animate-spin-slow   { animation: spin-slow   20s linear       infinite; }
+  .animate-fade-up     { animation: fade-up      0.6s ease-out  both; }
+  .animate-shimmer     { animation: shimmer      2s  linear      infinite; }
+
+  /* ── Gradient backgrounds ────────────────────── */
+  .bg-brand-gradient {
+    background: linear-gradient(135deg, #FF5722 0%, #FF8A50 60%, #FFB347 100%);
+  }
+
+  .bg-brand-gradient-soft {
+    background: linear-gradient(135deg, rgba(255,87,34,0.12) 0%, rgba(255,179,71,0.08) 100%);
+  }
+
+  .bg-hero-gradient {
+    background:
+      radial-gradient(ellipse 80% 60% at 60% 0%, rgba(255,87,34,0.20) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 10% 80%, rgba(255,179,71,0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 90%, rgba(99,102,241,0.10) 0%, transparent 60%),
+      rgb(var(--background));
+  }
+
+  /* ── Card hover glow ─────────────────────────── */
+  .card-hover-glow {
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .card-hover-glow:hover {
+    box-shadow:
+      0 4px 16px rgba(255,87,34,0.12),
+      0 16px 48px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+  }
+
+  /* ── Sidebar active glow ─────────────────────── */
+  .nav-active {
+    background: linear-gradient(135deg, rgba(255,87,34,0.15), rgba(255,179,71,0.08));
+    box-shadow: inset 3px 0 0 #FF5722;
+  }
+
+  /* ── Metric icon rings ────────────────────────── */
+  .metric-ring-income  { background: linear-gradient(135deg, #ECFDF5, #D1FAE5); box-shadow: 0 0 12px rgba(16,185,129,0.2); }
+  .metric-ring-expense { background: linear-gradient(135deg, #FEF2F2, #FEE2E2); box-shadow: 0 0 12px rgba(239,68,68,0.2); }
+  .metric-ring-profit  { background: linear-gradient(135deg, #FFF7ED, #FED7AA); box-shadow: 0 0 12px rgba(255,87,34,0.2); }
+
+  .dark .metric-ring-income  { background: rgba(16,185,129,0.20); }
+  .dark .metric-ring-expense { background: rgba(239,68,68,0.20); }
+  .dark .metric-ring-profit  { background: rgba(255,87,34,0.20); }
+}
